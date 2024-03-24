@@ -1,8 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Stock from './pages/Stock/Stock';
+import Users from './pages/Users/Users';
 import StockDetails from './components/StockDetails';
 import EditStockDetails from './components/editStock';
+import EditUser from './components/editUser';
 import './App.css';
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
         <Route path="/stock" element={<Stock />} />
         <Route path="/stock/:id" element={<StockDetails />} />
         <Route path="/stock/:id/edit" element={<EditStockDetails />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id/edit" element={<EditUser />} />
       </Routes>
     </Router>
   );
