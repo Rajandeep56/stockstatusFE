@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 const StockList = () => {
     const [stockList, setStockList] = useState([]);
     //temp setup for auth
@@ -19,10 +21,10 @@ const StockList = () => {
             <h1>Stock List</h1>
             <ul>
                 {stockList.map(item => (
-                    <li key={item.id}>{item.brand} {item.price_per_unit} {item.expiration_date} {item.quantity}</li>
-                    
+                    <li key={item.id}>{item.color} {item.quantity} <Link to={`/stock/${item.id}`}>Details</Link> </li>
                 ))}
             </ul>
+
         </div>
     );
 };
