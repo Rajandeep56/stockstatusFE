@@ -6,6 +6,8 @@ import auth from '../services/auth';
 
 const UsersList = () => {
     const [userList, setUserList] = useState([]);
+    const [error, setError] = useState(null);
+
     const token = auth.getToken();
     const authheader = { headers: { Authorization: `Bearer ${token}` } };
     useEffect(() => {
@@ -13,8 +15,14 @@ const UsersList = () => {
             setUserList(response.data);
         }).catch(error => {
             console.log(error);
+            setError(error);
         });
     }, []);
+    if (error && error.response && error.response.status === 403) {
+        return <div>You don't have permission to view the user list.
+            <Link to={`/`}>Back</Link>
+        </div>;
+    }
 
     return (
         <div>
@@ -24,6 +32,7 @@ const UsersList = () => {
                     <li key={item.id}>{item.username} {item.name} {item.age} {item.role} {item.permissions}<Link to={`/users/${item.id}/edit`}>Details</Link> </li>
                 ))}
             </ul>
+            <Link to={`/`}>Back</Link>
 
         </div>
     );

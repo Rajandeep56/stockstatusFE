@@ -6,12 +6,11 @@ import auth from '../services/auth';
 const StockList = () => {
     const [stockList, setStockList] = useState([]);
     const token = auth.getToken();
-    console.log(token);
-    const authheader = { headers: { Authorization: `Bearer ${token}` } };
+    const authHeader = { headers: { Authorization: `Bearer ${token}` } };
 
     useEffect(() => {
         if (token) {
-            axios.get('http://localhost:8088/api/list', authheader)
+            axios.get('http://localhost:8088/api/list', authHeader)
                 .then(response => {
                     setStockList(response.data);
                 })
@@ -21,13 +20,29 @@ const StockList = () => {
         }
     }, [token]);
 
-   
+    const handleQuantityChange = (id, quantity) => {
+        const newStockList = stockList.map(item => {
+            if (item.id === id) {
+                return { ...item, quantity: quantity };
+            }
+            return item;
+        });
+        setStockList(newStockList);
+        axios.patch(`http://localhost:8088/api/list/${id}`, {quantity: quantity}, authHeader)
+            .then(response => {
+                console.log('Quantity updated successfully:', response.data);
+            })
+            .catch(error => {
+                console.log('Error updating quantity:', error);
+            });
+    };
     return (
         <div>
             <h1>Stock List</h1>
             <ul>
                 {stockList.map(item => (
-                    <li key={item.id}>{item.color} {item.quantity} <Link to={`/stock/${item.id}`}>Details</Link></li>
+                    <li key={item.id}>{item.color} {item.availability} {item.quantity}  
+                    <button onClick={() => handleQuantityChange(item.id, parseInt(item.quantity) - 1)}>-</button><Link to={`/stock/${item.id}`}>Details</Link> </li>
                 ))}
             </ul>
         </div>

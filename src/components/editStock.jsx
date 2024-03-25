@@ -12,6 +12,11 @@ const EditStockDetails = () => {
         price_per_unit: '',
         expiration_date: ''
     });
+    const availability = [
+        "available",
+        "out of stock",
+        "running low"
+    ];
     const [updateClicked, setUpdateClicked] = useState(false);
     const token = auth.getToken();
     const authheader = { headers: { Authorization: `Bearer ${token}` } };
@@ -39,7 +44,7 @@ const EditStockDetails = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:8088/api/list/${id}`, itemDetails, auth);
+            await axios.patch(`http://localhost:8088/api/list/${id}`, itemDetails, authheader);
             setUpdateClicked(true);
         } catch (error) {
             console.error('Error updating item details:', error);
@@ -70,6 +75,19 @@ const EditStockDetails = () => {
                     Expiration Date:
                     <input type="text" name="expiration_date" value={itemDetails.expiration_date} onChange={handleInputChange} />
                 </label>
+                <p>Availability:</p>
+                {availability.map(option => (
+                    <label key={option}>
+                        <input 
+                            type="radio" 
+                            name="availability" 
+                            value={option} 
+                            checked={itemDetails.availability === option} 
+                            onChange={handleInputChange} 
+                        />
+                        {option}
+                    </label>
+                ))}
                 <button type="submit">Update</button>
             </form>
             {updateClicked && <p>Item details updated successfully.</p>}
