@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import auth from '../services/auth';
 
 const EditStockDetails = () => {
     const { id } = useParams();
@@ -12,16 +13,15 @@ const EditStockDetails = () => {
         expiration_date: ''
     });
     const [updateClicked, setUpdateClicked] = useState(false);
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbmUiLCJpYXQiOjE3MTEzMTMxNTR9.bY2mHQa-e_lltaGtfc_8Cgs9S2EM5yFy9_p4_6vUkIQ';
-    const auth = { headers: {Authorization: `Bearer ${token}`}}
-    
+    const token = auth.getToken();
+    const authheader = { headers: { Authorization: `Bearer ${token}` } };
     useEffect(() => {
         fetchData(id);
     }, [id]);
 
     const fetchData = async (paramid) => {
         try {
-            const response = await axios.get(`http://localhost:8088/api/list/${paramid}`, auth);
+            const response = await axios.get(`http://localhost:8088/api/list/${paramid}`, authheader);
             const currentItem = response.data;
             if (currentItem) {
                 setItemDetails(currentItem);

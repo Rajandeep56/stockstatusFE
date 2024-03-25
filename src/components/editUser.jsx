@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import auth from '../services/auth';
 
 const EditUser = () => {
     const { id } = useParams();
@@ -8,8 +9,9 @@ const EditUser = () => {
         permissions: []
     });
     const [updateClicked, setUpdateClicked] = useState(false);
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkYW0iLCJpYXQiOjE3MTEzMjA2NTJ9.LkmcOEHIi8i1Ppm-iOs38ysiKYyGw_CSOwo1yUij82M';
-    const auth = { headers: {Authorization: `Bearer ${token}`}}
+    const token = auth.getToken();
+    console.log(token);
+    const authheader = { headers: { Authorization: `Bearer ${token}` } };
     const availablePermissions = [
         "view_users",
         "editupdate_users",
@@ -22,7 +24,7 @@ const EditUser = () => {
 
     const fetchData = async (paramid) => {
         try {
-            const response = await axios.get(`http://localhost:8088/api/users/${paramid}`, auth);
+            const response = await axios.get(`http://localhost:8088/api/users/${paramid}`, authheader);
             const currentItem = response.data;
             if (currentItem) {
                 setItemDetails(currentItem);
@@ -55,7 +57,7 @@ const EditUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:8088/api/users/${id}`, itemDetails, auth);
+            await axios.patch(`http://localhost:8088/api/users/${id}`, itemDetails, authheader);
             setUpdateClicked(true);
         } catch (error) {
             console.error('Error updating item details:', error);
@@ -64,7 +66,7 @@ const EditUser = () => {
 
     return (
         <div>
-            <h2>Edit Stock Details</h2>
+            <h2>Edit User Details</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <h3>Current Permissions:</h3>
