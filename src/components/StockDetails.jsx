@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import auth from '../services/auth';
 
@@ -13,34 +13,45 @@ const StockDetails = () => {
         expiration_date: '',
         availability: ''
     });
-    
+    const [errorMessage, setErrorMessage] = useState('');
     const { id } = useParams();
 
     useEffect(() => {
         fetchData(id);
     }, [id]);
+
     const token = auth.getToken();
-    const authheader = { headers: { Authorization: `Bearer ${token}` } };
+    const authHeader = { headers: { Authorization: `Bearer ${token}` } };
+
     const fetchData = async (paramId) => {
         try {
-            const response = await axios.get(`https://stockstatus.onrender.com/api/list/${paramId}`,authheader);
+            const response = await axios.get(`https://stockstatus.onrender.com/api/list/${paramId}`, authHeader);
             const currentItem = response.data;
             setItemDetails(currentItem);
         } catch (error) {
-            console.error('Error fetching item details:', error);
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                setErrorMessage('You are not authorized for this operation.');
+            } else {
+                console.error('Error fetching item details:', error);
+            }
         }
     };
 
     return (
-        <div>
-            <h2>Stock Details</h2>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Stock Details</h2>
+            {errorMessage && (
+                <div style={{ backgroundColor: '#ffcccc', color: '#ff0000', padding: '10px', borderRadius: '5px', marginBottom: '20px' }}>
+                    {errorMessage}
+                </div>
+            )}
             <p>Color: {itemDetails.color}</p>
             <p>Brand: {itemDetails.brand}</p>
             <p>Quantity: {itemDetails.quantity}</p>
             <p>Price Per Unit: {itemDetails.price_per_unit}</p>
             <p>Expiration Date: {itemDetails.expiration_date}</p>
             <p>Availablity: {itemDetails.availability}</p>
-            <Link to={`/stock/${id}/edit`}>Edit</Link>
+            <Link to={`/stock/${id}/edit`} style={{ marginRight: '10px' }}>Edit</Link>
             <Link to={`/stock`}>Back</Link>
         </div>
     );
