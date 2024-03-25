@@ -11,7 +11,7 @@ const UsersList = () => {
     const token = auth.getToken();
     const authheader = { headers: { Authorization: `Bearer ${token}` } };
     useEffect(() => {
-        axios.get('http://localhost:8088/api/users/',authheader).then(response => {
+        axios.get('https://stockstatus.onrender.com/api/users/',authheader).then(response => {
             setUserList(response.data);
         }).catch(error => {
             console.log(error);

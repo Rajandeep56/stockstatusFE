@@ -23,7 +23,7 @@ const StockDetails = () => {
     const authheader = { headers: { Authorization: `Bearer ${token}` } };
     const fetchData = async (paramId) => {
         try {
-            const response = await axios.get(`http://localhost:8088/api/list/${paramId}`,authheader);
+            const response = await axios.get(`https://stockstatus.onrender.com/api/list/${paramId}`,authheader);
             const currentItem = response.data;
             setItemDetails(currentItem);
         } catch (error) {

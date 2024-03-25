@@ -10,7 +10,7 @@ const StockList = () => {
 
     useEffect(() => {
         if (token) {
-            axios.get('http://localhost:8088/api/list', authHeader)
+            axios.get('https://stockstatus.onrender.com/api/list', authHeader)
                 .then(response => {
                     setStockList(response.data);
                 })
@@ -28,7 +28,7 @@ const StockList = () => {
             return item;
         });
         setStockList(newStockList);
-        axios.patch(`http://localhost:8088/api/list/${id}`, {quantity: quantity}, authHeader)
+        axios.patch(`https://stockstatus.onrender.com/api/list/${id}`, {quantity: quantity}, authHeader)
             .then(response => {
                 console.log('Quantity updated successfully:', response.data);
             })
