@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import auth from '../services/auth';
-
+import { Navigate ,useNavigate } from 'react-router-dom';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    if (auth.isAuthenticated()) {
+        return <Navigate to="/" />;
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const token = await auth.login(username, password);
             console.log('Logged in successfully. Token:', token);
-        } catch (error) {
+            navigate('/')
+                } catch (error) {
             setError('Invalid username or password');
         }
     };

@@ -10,9 +10,10 @@ const StockDetails = () => {
         brand: '',
         quantity: '',
         price_per_unit: '',
-        expiration_date: ''
+        expiration_date: '',
+        availability: ''
     });
-
+    
     const { id } = useParams();
 
     useEffect(() => {
@@ -38,7 +39,9 @@ const StockDetails = () => {
             <p>Quantity: {itemDetails.quantity}</p>
             <p>Price Per Unit: {itemDetails.price_per_unit}</p>
             <p>Expiration Date: {itemDetails.expiration_date}</p>
+            <p>Availablity: {itemDetails.availability}</p>
             <Link to={`/stock/${id}/edit`}>Edit</Link>
+            <Link to={`/stock`}>Back</Link>
         </div>
     );
 };
