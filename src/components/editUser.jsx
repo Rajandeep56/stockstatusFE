@@ -24,7 +24,7 @@ const EditUser = () => {
 
     const fetchData = async (paramid) => {
         try {
-            const response = await axios.get(`http://localhost:8088/api/users/${paramid}`, authheader);
+            const response = await axios.get(`https://stockstatus.onrender.com/api/users/${paramid}`, authheader);
             const currentItem = response.data;
             if (currentItem) {
                 setItemDetails(currentItem);
@@ -57,7 +57,7 @@ const EditUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:8088/api/users/${id}`, itemDetails, authheader);
+            await axios.patch(`https://stockstatus.onrender.com/api/users/${id}`, itemDetails, authheader);
             setUpdateClicked(true);
         } catch (error) {
             console.error('Error updating item details:', error);
